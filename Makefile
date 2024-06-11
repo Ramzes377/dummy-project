@@ -1,6 +1,11 @@
 include .env
 
-#uvicorn main:app --host $HOST --port $PORT
+reqs = requirements.txt
+compile_settings = --output ${reqs} --without-hashes
 
-run:
-	uvicorn main:app --host 127.0.0.1 --port 8000
+compile-core-requirements:
+	poetry export -f ${reqs} ${compile_settings}
+
+run: compile-core-requirements
+	pip install -r ${reqs}
+	uvicorn main:app --host ${HOST} --port ${PORT}
